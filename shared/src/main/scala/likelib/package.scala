@@ -1,4 +1,12 @@
 package object likelib {
+  import scala.language.experimental.macros
+
+  type LongAs[A] = As[Long,A]
+
+  type StringAs[A] = As[String,A]
+
+  type IntAs[A] = As[Int,A]
+
   type LongLike[A] = Like[Long,A]
 
   type StringLike[A] = Like[String,A]
@@ -16,4 +24,6 @@ package object likelib {
   type LongSafeLike[From] = SafeLike[Long,From]
 
   type IntSafeLike[From] = SafeLike[Long,From]
+
+  def like[To,From]: Like[To,From] = macro likelib.macros.Macros.like[To,From]
 }
