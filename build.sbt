@@ -1,5 +1,5 @@
 lazy val commonSettings = Seq(
-  version := "0.0.1-SNAPSHOT",
+  version := "0.1.0",
   name := "likelib",
   organization := "com.stabletechs",
   scalaVersion := "2.11.7",
@@ -18,10 +18,34 @@ lazy val root = project.in(file("."))
 
 lazy val likelib = crossProject.in(file("."))
   .settings(commonSettings:_*)
+  .settings(
+    scmInfo := Some(ScmInfo(
+      url("https://github.com/Voltir/like-lib"),
+      "scm:git:git@github.com/Voltir/like-lib.git",
+      Some("scm:git:git@github.com/Voltir/like-lib.git"))
+    ),
+    publishTo := {
+      val nexus = "https://oss.sonatype.org/"
+      if (isSnapshot.value)
+        Some("snapshots" at nexus + "content/repositories/snapshots")
+      else
+       Some("releases" at nexus + "service/local/staging/deploy/maven2")
+    },
+    sonatypeProfileName := "com.stabletechs",
+    pomExtra := (
+      <developers>
+        <developer>
+          <id>Voltaire</id>
+          <name>Nick Childers</name>
+          <url>https://github.com/voltir/</url>
+        </developer>
+      </developers>
+    ),
+    pomIncludeRepository := { _ => false } 
+  )
   .jsSettings(
     scalaJSStage in Test := FullOptStage
   )
-
 
 lazy val likelibJS = likelib.js
 
