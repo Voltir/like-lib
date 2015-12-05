@@ -37,7 +37,7 @@ object Macros {
     val companion = getCompanion(c)(FromTpe)
 
     val wat = q"""
-       new Like[$ToTpe,$FromTpe] {
+       new likelib.Like[$ToTpe,$FromTpe] {
          override def to(inp: $FromTpe): $ToTpe = { inp.${accessors.head.asTerm} }
          override def from(inp: $ToTpe): $FromTpe = { $companion.apply(inp) }
        }
