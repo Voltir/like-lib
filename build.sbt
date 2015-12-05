@@ -1,5 +1,5 @@
 lazy val commonSettings = Seq(
-  version := "0.1.0",
+  version := "0.1.1",
   name := "likelib",
   organization := "com.stabletechs",
   scalaVersion := "2.11.7",
@@ -19,6 +19,7 @@ lazy val root = project.in(file("."))
 lazy val likelib = crossProject.in(file("."))
   .settings(commonSettings:_*)
   .settings(
+    publishMavenStyle := true,
     scmInfo := Some(ScmInfo(
       url("https://github.com/Voltir/like-lib"),
       "scm:git:git@github.com/Voltir/like-lib.git",
@@ -32,7 +33,9 @@ lazy val likelib = crossProject.in(file("."))
        Some("releases" at nexus + "service/local/staging/deploy/maven2")
     },
     sonatypeProfileName := "com.stabletechs",
-    pomExtra := (
+    homepage := Some(url("http://stabletechs.com/")),
+    licenses += ("MIT License", url("http://www.opensource.org/licenses/mit-license.php")),
+    pomExtra := 
       <developers>
         <developer>
           <id>Voltaire</id>
@@ -40,7 +43,7 @@ lazy val likelib = crossProject.in(file("."))
           <url>https://github.com/voltir/</url>
         </developer>
       </developers>
-    ),
+    ,
     pomIncludeRepository := { _ => false } 
   )
   .jsSettings(
