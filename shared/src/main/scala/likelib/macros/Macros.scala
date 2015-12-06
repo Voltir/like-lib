@@ -21,7 +21,6 @@ object Macros {
     val ToTpe = weakTypeTag[To].tpe
     val FromTpe = weakTypeTag[From].tpe
 
-
     val isCaseClass = FromTpe.typeSymbol.asClass.isCaseClass && !ToTpe.typeSymbol.asClass.isModuleClass
 
     if(!isCaseClass) {
@@ -29,20 +28,39 @@ object Macros {
     }
 
     val accessors = FromTpe.decls.filter(_.asTerm.isAccessor)
-
     if(accessors.size != 1) {
       c.abort(c.enclosingPosition,s"$FromTpe must extends AnyVal!")
     }
 
     val companion = getCompanion(c)(FromTpe)
 
-    val wat = q"""
+    val result = q"""
        new likelib.Like[$ToTpe,$FromTpe] {
          override def to(inp: $FromTpe): $ToTpe = { inp.${accessors.head.asTerm} }
          override def from(inp: $ToTpe): $FromTpe = { $companion.apply(inp) }
        }
      """
 
-    c.Expr(wat)
+    c.Expr(result)
+  }
+
+  def validate[To: c.WeakTypeTag, From: c.WeakTypeTag](c: blackbox.Context)(make: c.Expr[To => scala.util.Try[From]]): c.Expr[TryLike[To,From]] = {
+    import c.universe._
+    val ToTpe = weakTypeTag[To].tpe
+    val FromTpe = weakTypeTag[From].tpe
+
+    val accessors = FromTpe.decls.filter(_.asTerm.isAccessor)
+    if(accessors.size != 1) {
+      c.abort(c.enclosingPosition,s"$FromTpe must extends AnyVal!")
+    }
+
+    val result = q"""
+       new likelib.TryLike[$ToTpe,$FromTpe] {
+         override def to(inp: $FromTpe): $ToTpe = { inp.${accessors.head.asTerm} }
+         override def from(inp: $ToTpe): scala.util.Try[$FromTpe] = $make(inp)
+       }
+     """
+
+    c.Expr(result)
   }
 }
