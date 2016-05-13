@@ -1,5 +1,5 @@
 lazy val commonSettings = Seq(
-  version := "0.1.2-SNAPSHOT",
+  version := "0.1.2",
   name := "likelib",
   organization := "com.stabletechs",
   scalaVersion := "2.11.8",
