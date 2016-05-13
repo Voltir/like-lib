@@ -1,8 +1,8 @@
 lazy val commonSettings = Seq(
-  version := "0.1.1",
+  version := "0.1.2-SNAPSHOT",
   name := "likelib",
   organization := "com.stabletechs",
-  scalaVersion := "2.11.7",
+  scalaVersion := "2.11.8",
   libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value,
   libraryDependencies += "com.lihaoyi" %% "utest" % "0.3.1" % "test",
   testFrameworks += new TestFramework("utest.runner.Framework")
